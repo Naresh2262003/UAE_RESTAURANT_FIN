@@ -58,28 +58,31 @@ jobs:
       #          -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
       #          https://slack.com/api/files.upload
 
-      - name: Upload log.html to Slack
+      - name: Send Slack Message with Link
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}  # Store your token securely
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_CHANNEL_ID: C09ECPMQJ2C
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          REPO: ${{ github.repository }}
         run: |
           python - <<EOF
-          import requests
           import os
-
+          import requests
+      
           token = os.environ['SLACK_BOT_TOKEN']
           channel_id = os.environ['SLACK_CHANNEL_ID']
-          file_path = "results/log.html"
-
-          if not os.path.exists(file_path):
-              print(f"{file_path} does not exist!")
-          else:
-              with open(file_path, "rb") as f:
-                  response = requests.post(
-                      "https://slack.com/api/files.upload",
-                      headers={"Authorization": f"Bearer {token}"},
-                      files={"file": f},
-                      data={"channels": channel_id, "title": "Robot Framework Log"}
-                  )
-              print(response.json())
+          run_id = os.environ['GITHUB_RUN_ID']
+          repo = os.environ['REPO']
+      
+          # GitHub Actions artifact URL (public link)
+          file_url = f"https://github.com/{repo}/suites/{run_id}/artifacts"  # Optional: you can customize
+      
+          message = f"Robot Framework test completed. [Download Results]({file_url})"
+      
+          response = requests.post(
+              "https://slack.com/api/chat.postMessage",
+              headers={"Authorization": f"Bearer {token}", "Content-type": "application/json"},
+              json={"channel": channel_id, "text": message}
+          )
+          print(response.json())
           EOF
