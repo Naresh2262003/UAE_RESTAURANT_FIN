@@ -23,10 +23,21 @@ jobs:
       #     sudo apt-get update
       #     sudo apt-get install -y chromium-browser chromium-chromedriver
       
+      # - name: Install Firefox & Geckodriver
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install -y firefox geckodriver
+
       - name: Install Firefox & Geckodriver
         run: |
           sudo apt update
-          sudo apt install -y firefox geckodriver
+          sudo apt install -y firefox
+          # Download and install latest geckodriver
+          GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "tag_name" | cut -d '"' -f 4)
+          curl -L -o geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/${GECKO_VERSION}/geckodriver-${GECKO_VERSION}-linux64.tar.gz"
+          tar -xzf geckodriver.tar.gz
+          sudo mv geckodriver /usr/local/bin/
+          rm geckodriver.tar.gz
 
       - name: Install dependencies
         run: |
