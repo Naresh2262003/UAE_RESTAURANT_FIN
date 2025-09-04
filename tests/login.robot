@@ -22,7 +22,7 @@ Login to the platform as fiancier
     Call Method    ${chrome options}    add_argument    --disable-gpu
     Call Method    ${chrome options}    add_argument    --no-sandbox
     Call Method    ${chrome options}    add_argument    --disable-dev-shm-usage
-    Call Method    ${chrome options}    add_argument    --user-data-dir=/tmp/chrome-${unique_dir}
+    Call Method    ${chrome options}    add_argument    --user-data-dir /tmp/chrome-${unique_dir}
 
     # Open Browser using ChromeOptions object
     Create WebDriver    Chrome    chrome_options=${chrome options}
