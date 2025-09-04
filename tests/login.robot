@@ -1,9 +1,8 @@
 *** Settings ***
-Library           SeleniumLibrary
-Library           OperatingSystem
-Library           BuiltIn
-Library           Process
-Library           String
+Library    SeleniumLibrary
+Library    OperatingSystem
+Library    BuiltIn
+Library    String
 
 *** Variables ***
 ${BROWSER}        chrome
@@ -21,9 +20,8 @@ Login to the platform as fiancier
     Call Method    ${chrome options}    add_argument    --no-sandbox
     Call Method    ${chrome options}    add_argument    --disable-dev-shm-usage
 
-    # Open Browser using ChromeOptions object
-    Create WebDriver    Chrome    chrome_options=${chrome options}
-    Go To    ${URL}
+    # Open Browser using the correct 'options' argument
+    Open Browser    ${URL}    chrome    options=${chrome options}
     Maximize Browser Window
 
     Wait Until Element Is Visible    xpath=//input[@placeholder="Enter your email"]    ${Timeout}
