@@ -1,53 +1,31 @@
-name: Daily Robot Tests
+name: Daily Test Run
 
 on:
   schedule:
-    - cron: "30 3 * * *"   # 03:30 UTC = 09:00 IST (Asia/Kolkata)
-  workflow_dispatch:      # allows manual run from Actions UI
+    - cron: '30 3 * * *'  # 9 AM IST -> 3:30 AM UTC
+  workflow_dispatch: # lets you run it manually too
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.x'
+          node-version: '18'
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+        run: npm install
 
-      - name: Run Robot Framework tests
-        run: |
-          mkdir -p results
-          robot --output results/output.xml --report results/report.html --log results/log.html tests/
+      - name: Run tests
+        run: npm test -- --reporter junit --reporter-options "output=results.xml"
 
-      - name: Upload GitHub artifact (backup of reports)
-        uses: actions/upload-artifact@v3
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
         with:
-          name: robot-results
-          path: results/
-
-      - name: Upload report & log to Slack
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
-        run: |
-          # Upload report.html
-          curl -s -F "file=@results/report.html" \
-               -F "initial_comment=✅ Robot tests finished — report attached." \
-               -F "channels=${SLACK_CHANNEL_ID}" \
-               -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
-               https://slack.com/api/files.upload
-
-          # Upload log.html
-          curl -s -F "file=@results/log.html" \
-               -F "initial_comment=Full log attached." \
-               -F "channels=${SLACK_CHANNEL_ID}" \
-               -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
-               https://slack.com/api/files.upload
+          name: test-results
+          path: results.xml
