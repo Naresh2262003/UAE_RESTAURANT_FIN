@@ -14,15 +14,12 @@ ${password}       Naresh
 
 *** Test Cases ***
 Login to the platform as fiancier
-    ${unique_dir}=    Generate Random String    8    [LETTERS]
-
     # Create Chrome Options
     ${chrome options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
     Call Method    ${chrome options}    add_argument    --headless
     Call Method    ${chrome options}    add_argument    --disable-gpu
     Call Method    ${chrome options}    add_argument    --no-sandbox
     Call Method    ${chrome options}    add_argument    --disable-dev-shm-usage
-    Call Method    ${chrome options}    add_argument    --user-data-dir /tmp/chrome-${unique_dir}
 
     # Open Browser using ChromeOptions object
     Create WebDriver    Chrome    chrome_options=${chrome options}
