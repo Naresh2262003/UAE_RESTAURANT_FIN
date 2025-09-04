@@ -1,3 +1,162 @@
+# name: Daily Robot Framework Tests
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   schedule:
+#     - cron: '30 3 * * *'   # 9:00 AM IST
+#   workflow_dispatch:
+
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: '3.10'
+
+#       - name: Install dependencies
+#         run: |
+#           python -m pip install --upgrade pip
+#           pip install -r requirements.txt
+
+#       - name: Install Google Chrome
+#         run: |
+#           sudo apt update
+#           sudo apt install -y wget unzip
+#           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+#           sudo apt install -y ./google-chrome-stable_current_amd64.deb
+
+#       - name: Install ChromeDriver
+#         uses: nanasess/setup-chromedriver@v2
+#         with:
+#           chrome-version: latest
+
+#       - name: Run Robot Framework tests
+#         run: |
+#           mkdir -p results
+#           robot --outputdir results tests/
+
+#       - name: Upload Robot Results
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: robot-results
+#           path: results
+
+#       # - name: Send Slack Message with Link
+#       #   env:
+#       #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+#       #     SLACK_CHANNEL_ID: C09ECPMQJ2C
+#       #     GITHUB_RUN_ID: ${{ github.run_id }}
+#       #     REPO: ${{ github.repository }}
+#       #   run: |
+#       #     python - <<EOF
+#       #     import os
+#       #     import requests
+
+#       #     token = os.environ['SLACK_BOT_TOKEN']
+#       #     channel_id = os.environ['SLACK_CHANNEL_ID']
+#       #     run_id = os.environ['GITHUB_RUN_ID']
+#       #     repo = os.environ['REPO']
+
+#       #     # GitHub Actions artifact URL (public link)
+#       #     file_url = f"https://github.com/{repo}/suites/{run_id}/artifacts"  # Optional: you can customize
+
+#       #     message = f"Robot Framework test completed. [Download Results]({file_url})"
+
+#       #     response = requests.post(
+#       #         "https://slack.com/api/chat.postMessage",
+#       #         headers={"Authorization": f"Bearer {token}", "Content-type": "application/json"},
+#       #         json={"channel": channel_id, "text": message}
+#       #     )
+#       #     print(response.json())
+#       #     EOF
+# # new
+#       # - name: Archive Robot Results
+#       #   run: |
+#       #     zip -r results.zip results/
+
+#       # - name: Upload Robot Results as Artifact
+#       #   uses: actions/upload-artifact@v4
+#       #   with:
+#       #     name: robot-results
+#       #     path: results.zip
+#       #     overwrite: true
+
+#       # - name: Get Artifact URL and Send to Slack
+#       #   run: |
+#       #     python - <<EOF
+#       #     import os, requests
+
+#       #     token = os.environ['GITHUB_TOKEN']
+#       #     repo = os.environ['GITHUB_REPOSITORY']
+#       #     run_id = os.environ['GITHUB_RUN_ID']
+#       #     slack_token = os.environ['SLACK_BOT_TOKEN']
+#       #     slack_channel = os.environ['SLACK_CHANNEL_ID']
+
+#       #     # Get artifact download URL
+#       #     url = f"https://api.github.com/repos/{repo}/actions/runs/{run_id}/artifacts"
+#       #     resp = requests.get(url, headers={"Authorization": f"Bearer {token}"})
+#       #     data = resp.json()
+#       #     artifact_url = None
+#       #     for art in data['artifacts']:
+#       #         if art['name'] == 'robot-results':
+#       #             artifact_url = art['archive_download_url']
+#       #             break
+
+#       #     if artifact_url:
+#       #         message = f"Robot Framework tests completed! Download results [here]({artifact_url})"
+#       #         requests.post(
+#       #             "https://slack.com/api/chat.postMessage",
+#       #             headers={"Authorization": f"Bearer {slack_token}", "Content-Type": "application/json"},
+#       #             json={"channel": slack_channel, "text": message}
+#       #         )
+#       #     EOF
+#       #   env:
+#       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+#       #     SLACK_CHANNEL_ID: C09ECPMQJ2C
+
+#       - name: Publish log.html to GitHub Pages
+#         uses: peaceiris/actions-gh-pages@v6
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: ./results
+#           publish_branch: gh-pages
+#           destination_dir: robot-log
+
+#       - name: Send GitHub Pages Link to Slack
+#         run: |
+#           python - <<EOF
+#           import os, requests
+
+#           slack_token = os.environ['SLACK_BOT_TOKEN']
+#           slack_channel = os.environ['SLACK_CHANNEL_ID']
+#           repo = os.environ['GITHUB_REPOSITORY']
+
+#           # Direct URL to log.html on GitHub Pages
+#           url = f"https://{os.environ['GITHUB_REPOSITORY_OWNER']}.github.io/{repo.split('/')[-1]}/robot-log/log.html"
+#           message = f"Robot Framework test completed! View the log [here]({url})"
+
+#           requests.post(
+#               "https://slack.com/api/chat.postMessage",
+#               headers={"Authorization": f"Bearer {slack_token}", "Content-Type": "application/json"},
+#               json={"channel": slack_channel, "text": message}
+#           )
+#           EOF
+#         env:
+#           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+#           SLACK_CHANNEL_ID: C09ECPMQJ2C
+#           GITHUB_REPOSITORY: ${{ github.repository }}
+#           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+
+
 name: Daily Robot Framework Tests
 
 on:
@@ -42,116 +201,17 @@ jobs:
         run: |
           mkdir -p results
           robot --outputdir results tests/
+          zip -r results.zip results
 
       - name: Upload Robot Results
         uses: actions/upload-artifact@v4
         with:
-          name: robot-results
-          path: results
-
-      # - name: Send Slack Message with Link
-      #   env:
-      #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      #     SLACK_CHANNEL_ID: C09ECPMQJ2C
-      #     GITHUB_RUN_ID: ${{ github.run_id }}
-      #     REPO: ${{ github.repository }}
-      #   run: |
-      #     python - <<EOF
-      #     import os
-      #     import requests
-
-      #     token = os.environ['SLACK_BOT_TOKEN']
-      #     channel_id = os.environ['SLACK_CHANNEL_ID']
-      #     run_id = os.environ['GITHUB_RUN_ID']
-      #     repo = os.environ['REPO']
-
-      #     # GitHub Actions artifact URL (public link)
-      #     file_url = f"https://github.com/{repo}/suites/{run_id}/artifacts"  # Optional: you can customize
-
-      #     message = f"Robot Framework test completed. [Download Results]({file_url})"
-
-      #     response = requests.post(
-      #         "https://slack.com/api/chat.postMessage",
-      #         headers={"Authorization": f"Bearer {token}", "Content-type": "application/json"},
-      #         json={"channel": channel_id, "text": message}
-      #     )
-      #     print(response.json())
-      #     EOF
-# new
-      # - name: Archive Robot Results
-      #   run: |
-      #     zip -r results.zip results/
-
-      # - name: Upload Robot Results as Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: robot-results
-      #     path: results.zip
-      #     overwrite: true
-
-      # - name: Get Artifact URL and Send to Slack
-      #   run: |
-      #     python - <<EOF
-      #     import os, requests
-
-      #     token = os.environ['GITHUB_TOKEN']
-      #     repo = os.environ['GITHUB_REPOSITORY']
-      #     run_id = os.environ['GITHUB_RUN_ID']
-      #     slack_token = os.environ['SLACK_BOT_TOKEN']
-      #     slack_channel = os.environ['SLACK_CHANNEL_ID']
-
-      #     # Get artifact download URL
-      #     url = f"https://api.github.com/repos/{repo}/actions/runs/{run_id}/artifacts"
-      #     resp = requests.get(url, headers={"Authorization": f"Bearer {token}"})
-      #     data = resp.json()
-      #     artifact_url = None
-      #     for art in data['artifacts']:
-      #         if art['name'] == 'robot-results':
-      #             artifact_url = art['archive_download_url']
-      #             break
-
-      #     if artifact_url:
-      #         message = f"Robot Framework tests completed! Download results [here]({artifact_url})"
-      #         requests.post(
-      #             "https://slack.com/api/chat.postMessage",
-      #             headers={"Authorization": f"Bearer {slack_token}", "Content-Type": "application/json"},
-      #             json={"channel": slack_channel, "text": message}
-      #         )
-      #     EOF
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      #     SLACK_CHANNEL_ID: C09ECPMQJ2C
+          name: robot-results-${{ github.run_id }}
+          path: results.zip
 
       - name: Publish log.html to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v6
+        uses: peaceiris/actions-gh-pages@v5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./results
           publish_branch: gh-pages
-          destination_dir: robot-log
-
-      - name: Send GitHub Pages Link to Slack
-        run: |
-          python - <<EOF
-          import os, requests
-
-          slack_token = os.environ['SLACK_BOT_TOKEN']
-          slack_channel = os.environ['SLACK_CHANNEL_ID']
-          repo = os.environ['GITHUB_REPOSITORY']
-
-          # Direct URL to log.html on GitHub Pages
-          url = f"https://{os.environ['GITHUB_REPOSITORY_OWNER']}.github.io/{repo.split('/')[-1]}/robot-log/log.html"
-          message = f"Robot Framework test completed! View the log [here]({url})"
-
-          requests.post(
-              "https://slack.com/api/chat.postMessage",
-              headers={"Authorization": f"Bearer {slack_token}", "Content-Type": "application/json"},
-              json={"channel": slack_channel, "text": message}
-          )
-          EOF
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: C09ECPMQJ2C
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
