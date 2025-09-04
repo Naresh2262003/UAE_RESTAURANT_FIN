@@ -156,8 +156,6 @@
 #           GITHUB_REPOSITORY: ${{ github.repository }}
 #           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
 
-
-
 name: Daily Robot Framework Tests
 
 on:
@@ -165,7 +163,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '30 3 * * *'   # 9:00 AM IST
+    - cron: '30 3 * * *'  # 9:00 AM IST
   workflow_dispatch:
 
 jobs:
@@ -203,21 +201,19 @@ jobs:
           mkdir -p results
           robot --outputdir results tests/
 
-      - name: Zip Robot Results
+      - name: Zip Robot results
         run: |
-          cd results
-          zip -r results.zip .
-          cd ..
+          zip -r results.zip results
 
-      - name: Upload Robot Results Artifact
+      - name: Upload artifact (optional)
         uses: actions/upload-artifact@v4
         with:
           name: robot-results
-          path: results/results.zip
+          path: results.zip
 
-      - name: Publish log.html to GitHub Pages
+      - name: Publish results to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_PAT }}
           publish_dir: ./results
           publish_branch: gh-pages
