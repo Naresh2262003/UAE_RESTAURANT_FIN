@@ -6,7 +6,7 @@ Library           Process
 Library           String
 
 *** Variables ***
-${BROWSER}        firefox
+${BROWSER}        chrome
 ${URL}            https://rest-fin-fe.mangoforest-55e2394a.centralindia.azurecontainerapps.io/
 ${Timeout}        20s
 ${email_id}       test@r1.com
