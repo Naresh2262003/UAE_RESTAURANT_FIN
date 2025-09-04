@@ -46,13 +46,14 @@ jobs:
           name: robot-results
           path: results
 
-      - name: Send log.html to Slack
+      - name: Send log.html to Slack (file upload)
+        if: always()
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
         run: |
-          curl -X POST -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
-            -F "channel=$SLACK_CHANNEL_ID" \
-            -F "initial_comment=Here is today's Robot Framework log :robot_face:" \
-            -F "file=@results/log.html" \
-            https://slack.com/api/files.uploadV2
+          curl -F file=@results/log.html \
+               -F "initial_comment=Here is today's Robot Framework log :robot_face:" \
+               -F "channels=$SLACK_CHANNEL_ID" \
+               -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+               https://slack.com/api/files.upload
