@@ -45,3 +45,12 @@ jobs:
         with:
           name: robot-results
           path: results
+          
+      - name: Send log.html to Slack
+        if: always()   # ensures it runs even if tests fail
+        run: |
+          curl -F file=@results/log.html \
+               -F "initial_comment=:robot_face: Robot Framework Test Log for *$GITHUB_REPOSITORY* (commit $GITHUB_SHA)" \
+               -F channels=#your-channel-name \
+               -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
+               https://slack.com/api/files.upload
