@@ -9,7 +9,7 @@ Library           String
 ${BROWSER}        firefox
 ${URL}            https://rest-fin-fe.mangoforest-55e2394a.centralindia.azurecontainerapps.io/
 ${Timeout}        20s
-${email_id}       naresh@finance1.com
+${email_id}       test@r1.com
 ${password}       Naresh
 
 *** Test Cases ***

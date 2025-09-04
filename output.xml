@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.1.1 (Python 3.12.6 on win32)" generated="2025-09-04T08:16:34.141394" rpa="false" schemaversion="5">
+<suite id="s1" name="Login" source="D:\Restaurant_Financing\tests\login.robot">
+<test id="s1-t1" name="Login to the platform as fiancier" line="16">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-09-04T08:16:34.440693" level="INFO">Opening browser 'firefox' to base url 'https://rest-fin-fe.mangoforest-55e2394a.centralindia.azurecontainerapps.io/'.</msg>
+<arg>${URL}</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-09-04T08:16:34.440693" elapsed="7.524778"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-09-04T08:16:41.965471" elapsed="0.321600"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//input[@placeholder="Enter your email"]</arg>
+<arg>${Timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2025-09-04T08:16:42.290060" elapsed="0.049256"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-09-04T08:16:42.342863" level="INFO">Typing text 'test@r1.com' into text field 'xpath=//input[@placeholder="Enter your email"]'.</msg>
+<arg>xpath=//input[@placeholder="Enter your email"]</arg>
+<arg>${email_id}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-09-04T08:16:42.342863" elapsed="0.120482"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-09-04T08:16:42.467261" level="INFO">Typing text 'Naresh' into text field 'xpath=//input[@placeholder="Enter your password"]'.</msg>
+<arg>xpath=//input[@placeholder="Enter your password"]</arg>
+<arg>${password}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-09-04T08:16:42.466604" elapsed="0.041137"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-09-04T08:16:42.513330" level="INFO">Clicking element 'xpath=//button[text()="Login"]'.</msg>
+<arg>xpath=//button[text()="Login"]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-09-04T08:16:42.513330" elapsed="0.121663"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1800s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="FAIL" start="2025-09-04T08:16:42.639005" elapsed="25.613061">Execution terminated by signal</status>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="NOT RUN" start="2025-09-04T08:17:08.252066" elapsed="0.000000"/>
+</kw>
+<doc>This test case logs into the fiancier platform using provided credentials.</doc>
+<tag>fiancier</tag>
+<tag>login</tag>
+<status status="FAIL" start="2025-09-04T08:16:34.439369" elapsed="33.812697">Execution terminated by signal</status>
+</test>
+<status status="FAIL" start="2025-09-04T08:16:34.151332" elapsed="34.100734"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="0" fail="1" skip="0">fiancier</stat>
+<stat pass="0" fail="1" skip="0">login</stat>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="Login">Login</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
