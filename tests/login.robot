@@ -6,8 +6,8 @@ Library           Process
 Library           String
 
 *** Variables ***
-${BROWSER}        chrome
-${CHROME_BINARY}  /usr/bin/chromium-browser
+${BROWSER}      chrome
+${CHROME_OPTIONS}   --headless --disable-gpu --no-sandbox --disable-dev-shm-usage
 ${URL}            https://rest-fin-fe.mangoforest-55e2394a.centralindia.azurecontainerapps.io/
 ${Timeout}        20s
 ${email_id}       test@r1.com
@@ -20,7 +20,7 @@ Login to the platform as fiancier
     [Tags]    login    fiancier
 
     # Open and Maximize Browser
-    Open Browser    ${URL}    ${BROWSER}     options=add_argument("--headless")    executable_path=${CHROME_BINARY}
+    Open Browser    ${URL}    ${BROWSER}    options=add_argument("${CHROME_OPTIONS}")
     Maximize Browser Window
 
     # Entering Email and Password
