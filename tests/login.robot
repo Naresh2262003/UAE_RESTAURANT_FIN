@@ -15,11 +15,20 @@ ${password}       Naresh
 *** Test Cases ***
 Login to the platform as fiancier
     ${unique_dir}=    Generate Random String    8    [LETTERS]
-    &{chrome_options}=    Create Dictionary
-    ...    args=--headless,--disable-gpu,--no-sandbox,--disable-dev-shm-usage,--user-data-dir=/tmp/chrome-${unique_dir}
 
-    Open Browser    ${URL}    ${BROWSER}    options=${chrome_options}
+    # Create Chrome Options
+    ${chrome options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+    Call Method    ${chrome options}    add_argument    --headless
+    Call Method    ${chrome options}    add_argument    --disable-gpu
+    Call Method    ${chrome options}    add_argument    --no-sandbox
+    Call Method    ${chrome options}    add_argument    --disable-dev-shm-usage
+    Call Method    ${chrome options}    add_argument    --user-data-dir=/tmp/chrome-${unique_dir}
+
+    # Open Browser using ChromeOptions object
+    Create WebDriver    Chrome    chrome_options=${chrome options}
+    Go To    ${URL}
     Maximize Browser Window
+
     Wait Until Element Is Visible    xpath=//input[@placeholder="Enter your email"]    ${Timeout}
     Input Text    xpath=//input[@placeholder="Enter your email"]    ${email_id}
     Input Text    xpath=//input[@placeholder="Enter your password"]    ${password}
