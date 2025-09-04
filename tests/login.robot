@@ -29,4 +29,5 @@ Login to the platform as fiancier
     Input Text    xpath=//input[@placeholder="Enter your password"]    ${password}
     Click Element    xpath=//button[text()="Login"]
     Sleep   10s
+    Capture Page Screenshot
     Close Browser
