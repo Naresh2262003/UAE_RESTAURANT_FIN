@@ -6,7 +6,7 @@ Library           Process
 Library           String
 Library           JSONLibrary
 Library           Collections
-Test Teardown     Close Browser
+Test Teardown     Take Screenshot On Failure
 
 *** Variables ***
 ${BROWSER}        chrome
@@ -141,3 +141,9 @@ Get Total Funding Received
     ${funding}=    Convert To Number    ${funding_text}
     Log    Numeric Funding Value: ${funding}
     [Return]    ${funding}
+    
+Take Screenshot On Failure
+    [Documentation]    Capture screenshot if the test failed
+    ${test_status}=    Get Test Status
+    Run Keyword If    '${test_status}' == 'FAIL'    Capture Page Screenshot
+    Close Browser
