@@ -15,7 +15,9 @@ ${password}       Naresh
 *** Test Cases ***
 Login to the platform as fiancier
     ${unique_dir}=    Generate Random String    8    [LETTERS]
-    ${chrome_options}=    Create List    --headless    --disable-gpu    --no-sandbox    --disable-dev-shm-usage    --user-data-dir=/tmp/chrome-${unique_dir}
+    &{chrome_options}=    Create Dictionary
+    ...    args=--headless,--disable-gpu,--no-sandbox,--disable-dev-shm-usage,--user-data-dir=/tmp/chrome-${unique_dir}
+
     Open Browser    ${URL}    ${BROWSER}    options=${chrome_options}
     Maximize Browser Window
     Wait Until Element Is Visible    xpath=//input[@placeholder="Enter your email"]    ${Timeout}
