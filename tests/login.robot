@@ -7,7 +7,7 @@ Library           String
 
 *** Variables ***
 ${BROWSER}      chrome
-${CHROME_OPTIONS}   --headless --disable-gpu --no-sandbox --disable-dev-shm-usage
+${CHROME_OPTIONS}   --headless --disable-gpu --no-sandbox --disable-dev-shm-usage --user-data-dir=/tmp/chrome-${RANDOM}
 ${URL}            https://rest-fin-fe.mangoforest-55e2394a.centralindia.azurecontainerapps.io/
 ${Timeout}        20s
 ${email_id}       test@r1.com
