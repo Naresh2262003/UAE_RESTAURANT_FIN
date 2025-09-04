@@ -25,22 +25,28 @@ Full Restaurant Flow
     ${grand_total}=    Set Variable    0
 
     List Multiple Invoices For Brand    Careem
-
     ${dashboard_total}=    Get Total Funding Received
 
     List Multiple Invoices For Brand    Talabat
-
     ${dashboard_total}=    Get Total Funding Received
 
     List Multiple Invoices For Brand    Noon
-
     ${dashboard_total}=    Get Total Funding Received
 
 
 *** Keywords ***
 Login to Platform as Restaurant
-    Open Browser    ${URL}    ${BROWSER}
+    # Create Chrome Options for GitHub Actions
+    ${chrome options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+    Call Method    ${chrome options}    add_argument    --headless
+    Call Method    ${chrome options}    add_argument    --disable-gpu
+    Call Method    ${chrome options}    add_argument    --no-sandbox
+    Call Method    ${chrome options}    add_argument    --disable-dev-shm-usage
+
+    # Open Browser with options
+    Open Browser    ${URL}    chrome    options=${chrome options}
     Maximize Browser Window
+
     Wait Until Element Is Visible    xpath=//input[@placeholder="Enter your email"]    ${Timeout}
     Input Text    xpath=//input[@placeholder="Enter your email"]    ${EMAIL}
     Input Text    xpath=//input[@placeholder="Enter your password"]    ${PASSWORD}
@@ -50,17 +56,17 @@ Connect to the platform and navigate to User Dashboard
     [Documentation]    This test case connects to the platform and navigates to the user dashboard.
     [Tags]    connect    dashboard 
     Wait Until Element Is Visible    xpath=//div[@data-slot="card"][.//img[@alt="talabat"]]   ${Timeout}
-    sleep   2s
+    Sleep   2s
     ${isTalabatConnected}=    Run Keyword And Return Status    Element Should Be Visible    xpath=//div[@data-slot="card"][.//img[@alt="talabat"]]//button[normalize-space()="Connect"]
     Run Keyword If    ${isTalabatConnected}     Click Element    xpath=//div[@data-slot="card"][.//img[@alt="talabat"]]//button[normalize-space()="Connect"]
 
     Wait Until Element Is Visible    xpath=//div[@data-slot="card"][.//img[@alt="noonfood"]]   ${Timeout}
-    sleep   2s
+    Sleep   2s
     ${isNoonFoodConnected}=    Run Keyword And Return Status    Element Should Be Visible    xpath=//div[@data-slot="card"][.//img[@alt="noonfood"]]//button[normalize-space()="Connect"]
     Run Keyword If    ${isNoonFoodConnected}     Click Element    xpath=//div[@data-slot="card"][.//img[@alt="noonfood"]]//button[normalize-space()="Connect"]
 
     Wait Until Element Is Visible    xpath=//div[@data-slot="card"][.//img[@alt="careem"]]   ${Timeout}
-    sleep   2s
+    Sleep   2s
     ${isCareemConnected}=    Run Keyword And Return Status    Element Should Be Visible    xpath=//div[@data-slot="card"][.//img[@alt="careem"]]//button[normalize-space()="Connect"]
     Run Keyword If    ${isCareemConnected}     Click Element    xpath=//div[@data-slot="card"][.//img[@alt="careem"]]//button[normalize-space()="Connect"]
 
