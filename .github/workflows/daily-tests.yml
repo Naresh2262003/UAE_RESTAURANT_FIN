@@ -157,6 +157,7 @@
 #           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
 
 
+
 name: Daily Robot Framework Tests
 
 on:
@@ -201,16 +202,21 @@ jobs:
         run: |
           mkdir -p results
           robot --outputdir results tests/
-          zip -r results.zip results
 
-      - name: Upload Robot Results
+      - name: Zip Robot Results
+        run: |
+          cd results
+          zip -r results.zip .
+          cd ..
+
+      - name: Upload Robot Results Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: robot-results-${{ github.run_id }}
-          path: results.zip
+          name: robot-results
+          path: results/results.zip
 
       - name: Publish log.html to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v5
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./results
