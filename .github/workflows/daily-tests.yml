@@ -1,9 +1,9 @@
 name: Daily Robot Framework Tests
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   schedule:
     - cron: '30 3 * * *'  # 9:00 AM IST
   workflow_dispatch:
@@ -60,10 +60,10 @@ jobs:
           publish_dir: ./results
           publish_branch: gh-pages
 
-      - name: Send log link to Slack
-        run: |
-          LOG_URL="https://naresh2262003.github.io/UAE_RESTAURANT_FIN/log.html"
-          curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
-               -H "Content-type: application/json" \
-               -d "{\"channel\":\"C09ECPMQJ2C\",\"text\":\"Robot Framework log is available: $LOG_URL\"}" \
-               https://slack.com/api/chat.postMessage
+      # - name: Send log link to Slack
+      #   run: |
+      #     LOG_URL="https://naresh2262003.github.io/UAE_RESTAURANT_FIN/log.html"
+      #     curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
+      #          -H "Content-type: application/json" \
+      #          -d "{\"channel\":\"C09ECPMQJ2C\",\"text\":\"Robot Framework log is available: $LOG_URL\"}" \
+      #          https://slack.com/api/chat.postMessage
