@@ -53,7 +53,6 @@ Login As Restaurant
     Call Method    ${chrome options}    add_argument    ${size}
 
     Open Browser    ${URL}    chrome    options=${chrome options}
-    # Open Browser    ${URL}    firefox
     Maximize Browser Window
 
     Wait Until Element Is Visible    xpath=//input[@placeholder="Enter your email"]    ${Timeout}
@@ -71,7 +70,6 @@ Login As Financier
     Call Method    ${chrome options}    add_argument    ${size}
 
     Open Browser    ${URL}    chrome    options=${chrome options}
-    # Open Browser    ${URL}    firefox
     Maximize Browser Window
 
     Wait Until Element Is Visible    xpath=//input[@placeholder="Enter your email"]    ${Timeout}
