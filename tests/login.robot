@@ -228,14 +228,20 @@ Place And Wait For Buy Fulfillment
         Run Keyword If    '${status}'=='FULFILLED'    Exit For Loop
     END
 
-    ${end_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S
-    ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}
+    # ${end_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S
+    # ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}
     # ${msg}=    Catenate    >>> Order for ${brand} fulfilled in ${duration} <<<
     # Log To Console    ${msg}
     # Append To File    results/summary.txt    ${msg}\n
 
-    ${line}=    Catenate    SEPARATOR=      ${brand}    ${duration}
+    ${end_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S.%f
+    ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}    precision=milliseconds
+
+    ${line}=    Set Variable    ${brand}${SPACE*10}${duration}
     Append To File    results/summary.txt    ${line}\n
+
+    # ${line}=    Catenate    SEPARATOR=      ${brand}    ${duration}
+    # Append To File    results/summary.txt    ${line}\n
 
 Initialize Summary File
     Remove File    results/summary.txt
