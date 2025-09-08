@@ -126,7 +126,9 @@ ${FIN_EMAIL}          test@f10.com
 
 *** Test Cases ***
 End To End Sell-Buy Fulfillment
-    [Documentation]    Restaurant sells at 2% discount (1000), Financier buys at 1% (1000), wait until fulfilled and measure time
+    [Documentation]    Restaurant and Financier flow
+    
+    Initialize Summary File
     Login As Restaurant  
     Sleep    2s
     Place Restaurant Sell Order    Careem
@@ -134,14 +136,14 @@ End To End Sell-Buy Fulfillment
     Place Restaurant Sell Order    Noon
     Close Browser
 
-    Initialize Summary File
-
     Login As Financier  
     Sleep    2s
     Place And Wait For Buy Fulfillment    Careem
     Place And Wait For Buy Fulfillment    Talabat
     Place And Wait For Buy Fulfillment    Noon
 
+    ${log_line}=    Set Variable    \nTest log: https://naresh2262003.github.io/UAE_RESTAURANT_FIN/log.html
+    Append To File    results/summary.txt    ${log_line}
 
 *** Keywords ***
 Login As Restaurant
@@ -228,28 +230,8 @@ Place And Wait For Buy Fulfillment
         Run Keyword If    '${status}'=='FULFILLED'    Exit For Loop
     END
 
-    # ${end_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S
-    # ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}
-    # ${msg}=    Catenate    >>> Order for ${brand} fulfilled in ${duration} <<<
-    # Log To Console    ${msg}
-    # Append To File    results/summary.txt    ${msg}\n
-
-    # ${end_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S.%f
-    # ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}    precision=milliseconds
-
-    # ${line}=    Set Variable    ${brand}${SPACE*10}${duration}
-    # Append To File    results/summary.txt    ${line}\n
-
-    # ${line}=    Catenate    SEPARATOR=      ${brand}    ${duration}
-    # Append To File    results/summary.txt    ${line}\n
-
-    # ${start_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S.%f
     ${end_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S.%f
-
-    # Get duration in seconds with microseconds
     ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}    result_format=number
-
-    # Convert seconds → milliseconds (keep 3 decimals)
     ${duration}=    Evaluate    round(${duration}, 3)
 
     ${brand_padded}=    Evaluate    "{:<12}".format("${brand}")

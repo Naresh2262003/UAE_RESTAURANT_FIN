@@ -73,7 +73,7 @@ jobs:
           mkdir -p results
           touch results/summary.txt
 
-      - name: Send settlement summary to Slack
+      - name: Send Test Result to Slack
         run: |
           SUMMARY=$(cat results/summary.txt | sed ':a;N;$!ba;s/\n/\\n/g')
           curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
