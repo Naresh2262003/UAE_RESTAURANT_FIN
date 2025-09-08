@@ -212,7 +212,7 @@ Place And Wait For Buy Fulfillment
     Sleep   1s
     Input Text    xpath=(//input)[2]    ${BUY_AMOUNT}
     Sleep   1s
-    ${start_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S
+    ${start_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S.%f
     Wait Until Element Is Enabled    (//button[normalize-space()='Buy Tokens'])    ${Timeout}
     Click Element    (//button[normalize-space()='Buy Tokens'])
     Wait Until Element Is Visible    xpath=//button[text()='Go to My Tradebook']    ${Timeout}
@@ -234,14 +234,26 @@ Place And Wait For Buy Fulfillment
     # Log To Console    ${msg}
     # Append To File    results/summary.txt    ${msg}\n
 
-    ${end_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S.%f
-    ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}    precision=milliseconds
+    # ${end_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S.%f
+    # ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}    precision=milliseconds
 
-    ${line}=    Set Variable    ${brand}${SPACE*10}${duration}
-    Append To File    results/summary.txt    ${line}\n
+    # ${line}=    Set Variable    ${brand}${SPACE*10}${duration}
+    # Append To File    results/summary.txt    ${line}\n
 
     # ${line}=    Catenate    SEPARATOR=      ${brand}    ${duration}
     # Append To File    results/summary.txt    ${line}\n
+
+    # ${start_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S.%f
+    ${end_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S.%f
+
+    # Get duration in seconds with microseconds
+    ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}    result_format=number
+
+    # Convert seconds → milliseconds (keep 3 decimals)
+    ${duration_ms}=    Evaluate    round(${duration} * 1000, 3)
+
+    ${line}=    Set Variable    ${brand}${SPACE*10}${duration_ms} ms
+    Append To File    results/summary.txt    ${line}\n
 
 Initialize Summary File
     Remove File    results/summary.txt
