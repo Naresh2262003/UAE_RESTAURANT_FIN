@@ -250,9 +250,11 @@ Place And Wait For Buy Fulfillment
     ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}    result_format=number
 
     # Convert seconds → milliseconds (keep 3 decimals)
-    ${duration_ms}=    Evaluate    round(${duration} * 1000, 3)
+    ${duration}=    Evaluate    round(${duration}, 3)
 
-    ${line}=    Set Variable    ${brand}${SPACE*10}${duration_ms} ms
+    ${brand_padded}=    Evaluate    "{:<12}".format("${brand}")
+
+    ${line}=    Set Variable    ${brand_padded}${duration} seconds
     Append To File    results/summary.txt    ${line}\n
 
 Initialize Summary File
