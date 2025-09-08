@@ -68,6 +68,11 @@ jobs:
       #          -d "{\"channel\":\"C09E3U5P89K\",\"text\":\"Robot Framework log is available: $LOG_URL\"}" \
       #          https://slack.com/api/chat.postMessage
 
+      - name: Ensure summary file exists
+        run: |
+          mkdir -p results
+          touch results/summary.txt
+
       - name: Send settlement summary to Slack
         run: |
           SUMMARY=$(cat results/summary.txt | sed ':a;N;$!ba;s/\n/\\n/g')

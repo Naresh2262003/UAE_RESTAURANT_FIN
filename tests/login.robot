@@ -230,4 +230,5 @@ Place And Wait For Buy Fulfillment
     ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}
     ${msg}=    Catenate    >>> Order for ${brand} fulfilled in ${duration} <<<
     Log To Console    ${msg}
+    Append To File    results/summary.txt    ${msg}\n
 
