@@ -134,6 +134,8 @@ End To End Sell-Buy Fulfillment
     Place Restaurant Sell Order    Noon
     Close Browser
 
+    Initialize Summary File
+
     Login As Financier  
     Sleep    2s
     Place And Wait For Buy Fulfillment    Careem
@@ -228,7 +230,14 @@ Place And Wait For Buy Fulfillment
 
     ${end_time}=    Get Current Date    result_format=%Y-%m-%d %H:%M:%S
     ${duration}=    Subtract Date From Date    ${end_time}    ${start_time}
-    ${msg}=    Catenate    >>> Order for ${brand} fulfilled in ${duration} <<<
-    Log To Console    ${msg}
-    Append To File    results/summary.txt    ${msg}\n
+    # ${msg}=    Catenate    >>> Order for ${brand} fulfilled in ${duration} <<<
+    # Log To Console    ${msg}
+    # Append To File    results/summary.txt    ${msg}\n
+
+    ${line}=    Catenate    SEPARATOR=      ${brand}    ${duration}
+    Append To File    results/summary.txt    ${line}\n
+
+Initialize Summary File
+    Remove File    results/summary.txt
+    Append To File    results/summary.txt    Settlement time for platform:\n
 
