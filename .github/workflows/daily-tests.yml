@@ -60,10 +60,18 @@ jobs:
           publish_dir: ./results
           publish_branch: gh-pages
 
-      - name: Send log link to Slack
+      # - name: Send log link to Slack
+      #   run: |
+      #     LOG_URL="https://naresh2262003.github.io/UAE_RESTAURANT_FIN/log.html"
+      #     curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
+      #          -H "Content-type: application/json" \
+      #          -d "{\"channel\":\"C09E3U5P89K\",\"text\":\"Robot Framework log is available: $LOG_URL\"}" \
+      #          https://slack.com/api/chat.postMessage
+
+      - name: Send settlement summary to Slack
         run: |
-          LOG_URL="https://naresh2262003.github.io/UAE_RESTAURANT_FIN/log.html"
+          SUMMARY=$(cat results/summary.txt | sed ':a;N;$!ba;s/\n/\\n/g')
           curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
                -H "Content-type: application/json" \
-               -d "{\"channel\":\"C09E3U5P89K\",\"text\":\"Robot Framework log is available: $LOG_URL\"}" \
+               -d "{\"channel\":\"C09E3U5P89K\",\"text\":\"$SUMMARY\"}" \
                https://slack.com/api/chat.postMessage
