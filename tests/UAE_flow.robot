@@ -116,7 +116,7 @@ Place And Wait For Buy Fulfillment
     Click Element    xpath=//button[text()='Go to My Tradebook']
 
     FOR    ${i}    IN RANGE    50
-        Sleep    2s
+        Sleep    1s
         Reload Page
         Wait Until Element Is Visible    xpath=//h1[text()="My Tradebook"]    ${Timeout} 
         Wait Until Element Is Visible    xpath=//table//tr     ${Timeout}  
@@ -136,5 +136,5 @@ Place And Wait For Buy Fulfillment
 
 Initialize Summary File
     Remove File    results/summary.txt
-    Append To File    results/summary.txt    Settlement time for platform:\n
+    Append To File    results/summary.txt    Settlement time for platforms:\n
 
