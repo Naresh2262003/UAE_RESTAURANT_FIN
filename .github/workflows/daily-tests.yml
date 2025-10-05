@@ -1,9 +1,9 @@
 name: Daily Robot Framework Tests
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   schedule:
     - cron: '15 3 * * *'  # 8:45 AM IST
   workflow_dispatch:
@@ -70,5 +70,5 @@ jobs:
           SUMMARY=$(cat results/summary.txt | sed ':a;N;$!ba;s/\n/\\n/g')
           curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_BOT_TOKEN }}" \
                -H "Content-type: application/json" \
-               -d "{\"channel\":\"C09E3U5P89K\",\"text\":\"$SUMMARY\"}" \
-               https://slack.com/api/chat.postMessage 
+               -d "{\"channel\":\"C09ECPMQJ2C\",\"text\":\"$SUMMARY\"}" \
+               https://slack.com/api/chat.postMessage
